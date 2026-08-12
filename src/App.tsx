@@ -7,6 +7,10 @@ import { useAppRouter } from './hooks/useAppRouter'
 function App() {
   const { screen, goHome, goAdd, goDetail, goSettings } = useAppRouter()
 
+  // Known gap: viewports narrower than 402px (many Android phones at 360px,
+  // iPhone SE at 375px) will clip the third glass or force horizontal
+  // scroll — Glass is hard-coded to 106px (tied to the packing algorithm's
+  // coordinate space) and nothing shrinks it below that. Flagged, not fixed.
   return (
     <div
       className="mx-auto flex min-h-full w-[402px] max-w-full flex-col px-5"
