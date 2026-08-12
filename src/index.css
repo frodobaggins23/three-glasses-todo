@@ -36,7 +36,7 @@
   --color-action-text: #191612;
 
   /* Typography */
-  --font-serif: "Instrument Serif", serif;
+  --font-serif: "Instrument Serif", Georgia, serif;
   --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
 
   --text-38: 2.375rem;
