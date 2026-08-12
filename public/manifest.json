@@ -1,0 +1,10 @@
+{
+  "name": "Three Glasses",
+  "short_name": "3 Glasses",
+  "description": "A phone-first todo app that reframes your task list as a workload dashboard.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0d0c0a",
+  "theme_color": "#0d0c0a",
+  "icons": [{ "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}
