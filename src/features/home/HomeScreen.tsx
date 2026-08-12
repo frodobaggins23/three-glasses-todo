@@ -154,7 +154,10 @@ export function HomeScreen({ goAdd, goDetail, goSettings }: HomeScreenProps) {
       />
       <button
         type="button"
-        onClick={goAdd}
+        onClick={() => {
+          state.resetDraftForNewAdd()
+          goAdd()
+        }}
         className="absolute bottom-[52px] left-1/2 flex h-[66px] w-[66px] -translate-x-1/2 items-center justify-center rounded-full text-34 font-light text-action-text shadow-fab active:scale-[0.94]"
         style={{ background: 'var(--gradient-action)' }}
       >
