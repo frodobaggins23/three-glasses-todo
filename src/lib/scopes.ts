@@ -2,7 +2,6 @@ export type ScopeKey = 's' | 'm' | 'l'
 
 export interface ScopeConfig {
   key: ScopeKey
-  name: string
   /** Base dot diameter used for the task-detail scope indicator (rendered at size + 8). */
   size: number
   /** oklch hue in degrees. */
@@ -10,10 +9,13 @@ export interface ScopeConfig {
   defCap: number
 }
 
+// Display names live in locales/en/translation.json under "scopes" — look them
+// up via t(`scopes.${key}`) at render time rather than storing English here,
+// so error/label copy stays i18n-able instead of baked into application state.
 export const SCOPES: ScopeConfig[] = [
-  { key: 's', name: 'Small', size: 15, hue: 62, defCap: 12 },
-  { key: 'm', name: 'Medium', size: 22, hue: 22, defCap: 6 },
-  { key: 'l', name: 'Large', size: 30, hue: 232, defCap: 3 },
+  { key: 's', size: 15, hue: 62, defCap: 12 },
+  { key: 'm', size: 22, hue: 22, defCap: 6 },
+  { key: 'l', size: 30, hue: 232, defCap: 3 },
 ]
 
 export const SC: Record<ScopeKey, ScopeConfig> = Object.fromEntries(

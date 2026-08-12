@@ -1,0 +1,50 @@
+{
+  "common": {
+    "back": "‹ Back"
+  },
+  "scopes": {
+    "s": "Small",
+    "m": "Medium",
+    "l": "Large"
+  },
+  "errors": {
+    "homeGlassFull": "{{scope}} is full — {{cap}} of {{cap}}. Finish something here, or raise the limit in settings.",
+    "addGlassFull": "{{scope}} is full — {{cap}} of {{cap}}. Finish something, or raise the limit in settings.",
+    "titleRequired": "Give it a name first."
+  },
+  "home": {
+    "title": "Your load",
+    "marblesInPlay": "{{count}} marbles in play",
+    "aGlassIsFull": "a glass is full",
+    "recent": "Recent",
+    "sortNewest": "Newest",
+    "sortSize": "Size",
+    "showMore": "Show {{count}} more",
+    "limits": "Limits",
+    "dismiss": "Dismiss"
+  },
+  "add": {
+    "cancel": "Cancel",
+    "add": "Add",
+    "heading": "How big is it?",
+    "subhead": "Your call — scope is whatever it feels like to you.",
+    "titlePlaceholder": "What is it?",
+    "footnote": "Title is all you need. Notes and a reminder can come later.",
+    "full": "full"
+  },
+  "detail": {
+    "notes": "Notes",
+    "notesPlaceholder": "Anything worth remembering…",
+    "reminder": "Reminder",
+    "complete": "Complete",
+    "dropIt": "Drop it"
+  },
+  "settings": {
+    "heading": "Capacity",
+    "subhead": "How much you're willing to carry at once. Lower is braver.",
+    "capHintSpare": "{{count}} in the glass, {{spare}} to spare",
+    "capHintOverLimit": "{{count}} in the glass — over the limit",
+    "capBlockedNote": "Empty a {{scope}} marble first — {{count}} already in the glass.",
+    "footnote": "A glass can't hold more than its limit. When it's full, the only way in is to finish something — or admit you need more room."
+  }
+}
