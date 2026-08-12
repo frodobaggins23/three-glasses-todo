@@ -22,8 +22,8 @@ export const SC: Record<ScopeKey, ScopeConfig> = Object.fromEntries(
   SCOPES.map((s) => [s.key, s]),
 ) as Record<ScopeKey, ScopeConfig>
 
-/** Glass-caption chip dot sizes — distinct from ScopeConfig.size, matches the prototype's hardcoded values. */
-export const CAPTION_DOT_SIZE: Record<ScopeKey, number> = { l: 26, m: 20, s: 14 }
+/** Settings-screen capacity-row chip dot sizes — distinct from ScopeConfig.size, matches the prototype's hardcoded values. */
+export const SETTINGS_CHIP_DOT_SIZE: Record<ScopeKey, number> = { l: 26, m: 20, s: 14 }
 
 /** Sort order for the "Size" recent-list sort: Large first. */
 export const SIZE_SORT_ORDER: Record<ScopeKey, number> = { l: 0, m: 1, s: 2 }

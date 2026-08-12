@@ -18,9 +18,15 @@
 
   --color-text-primary: #f2ece2;
   --color-text-secondary: #e4ddd2;
+  --color-text-tertiary: #b8b0a3;
   --color-text-muted: #8d8579;
+  --color-text-quiet: #7c756a;
   --color-text-faint: #6d675d;
   --color-text-disabled: #5f594f;
+
+  --color-icon-muted: #a49a8a;
+  --color-count-normal: #c4bcae;
+  --color-action-secondary: #9c9488;
 
   --color-selected-pill: #e3d9c6;
   --color-warning: #e8c98a;
