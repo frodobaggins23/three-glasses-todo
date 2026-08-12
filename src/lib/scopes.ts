@@ -1,0 +1,27 @@
+export type ScopeKey = 's' | 'm' | 'l'
+
+export interface ScopeConfig {
+  key: ScopeKey
+  name: string
+  /** Base dot diameter used for the task-detail scope indicator (rendered at size + 8). */
+  size: number
+  /** oklch hue in degrees. */
+  hue: number
+  defCap: number
+}
+
+export const SCOPES: ScopeConfig[] = [
+  { key: 's', name: 'Small', size: 15, hue: 62, defCap: 12 },
+  { key: 'm', name: 'Medium', size: 22, hue: 22, defCap: 6 },
+  { key: 'l', name: 'Large', size: 30, hue: 232, defCap: 3 },
+]
+
+export const SC: Record<ScopeKey, ScopeConfig> = Object.fromEntries(
+  SCOPES.map((s) => [s.key, s]),
+) as Record<ScopeKey, ScopeConfig>
+
+/** Glass-caption chip dot sizes — distinct from ScopeConfig.size, matches the prototype's hardcoded values. */
+export const CAPTION_DOT_SIZE: Record<ScopeKey, number> = { l: 26, m: 20, s: 14 }
+
+/** Sort order for the "Size" recent-list sort: Large first. */
+export const SIZE_SORT_ORDER: Record<ScopeKey, number> = { l: 0, m: 1, s: 2 }
