@@ -1,0 +1,13 @@
+on: workflow_dispatch
+name: 🚀 Deploy website
+jobs:
+  web-deploy:
+    name: 🎉 Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: frodobaggins23/gh-shared-actions/sftp-deploy@main
+        with:
+          dist-path: dist
+          remote-path: three-glasses
+          ftp-user: ${{ vars.FTP_USER }}
+          ftp-password: ${{ secrets.FTP_PASSWORD }}
