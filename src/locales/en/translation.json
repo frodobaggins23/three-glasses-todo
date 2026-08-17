@@ -45,6 +45,15 @@
     "capHintSpare": "{{count}} in the glass, {{spare}} to spare",
     "capHintOverLimit": "{{count}} in the glass — over the limit",
     "capBlockedNote": "Empty a {{scope}} marble first — {{count}} already in the glass.",
-    "footnote": "A glass can't hold more than its limit. When it's full, the only way in is to finish something — or admit you need more room."
+    "footnote": "A glass can't hold more than its limit. When it's full, the only way in is to finish something — or admit you need more room.",
+    "backup": {
+      "heading": "Backup",
+      "subhead": "Everything here lives only on this device. Export a copy to keep somewhere safe, or bring one back in.",
+      "export": "Export",
+      "import": "Import",
+      "confirmReplace": "Import will replace everything currently on this device with the {{count}} task(s) in this file. Continue?",
+      "importSuccess": "Imported {{count}} task(s).",
+      "importUnknownError": "Couldn't read that file."
+    }
   }
 }
