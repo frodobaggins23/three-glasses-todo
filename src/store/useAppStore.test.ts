@@ -207,7 +207,6 @@ describe('exportBackup / restoreBackup', () => {
       fx: { 1: 'new' },
     })
     useAppStore.getState().restoreBackup({
-      version: 1,
       exportedAt: '',
       tasks: [{ id: 2, scope: 'l', title: 'new', notes: '', remind: '', t: 2 }],
       caps: { s: 1, m: 1, l: 1 },

@@ -41,9 +41,8 @@ describe('parseBackup validation', () => {
     expect(() => parseBackup(JSON.stringify({ tasks: [], caps: { s: 1 } }))).toThrow(InvalidBackupError)
   })
 
-  it('defaults a missing version/exportedAt rather than rejecting', () => {
+  it('defaults a missing exportedAt rather than rejecting', () => {
     const parsed = parseBackup(JSON.stringify({ tasks: [], caps }))
-    expect(parsed.version).toBe(1)
     expect(parsed.exportedAt).toBe('')
   })
 })

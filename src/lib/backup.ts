@@ -1,17 +1,14 @@
 import { SCOPES, type ScopeKey } from './scopes'
 import type { Task } from './types'
 
-export const BACKUP_VERSION = 1
-
 export interface BackupData {
-  version: number
   exportedAt: string
   tasks: Task[]
   caps: Record<ScopeKey, number>
 }
 
 export function buildBackup(tasks: Task[], caps: Record<ScopeKey, number>): BackupData {
-  return { version: BACKUP_VERSION, exportedAt: new Date().toISOString(), tasks, caps }
+  return { exportedAt: new Date().toISOString(), tasks, caps }
 }
 
 export function backupFilename(date = new Date()): string {
@@ -61,7 +58,6 @@ export function parseBackup(json: string): BackupData {
     throw new InvalidBackupError('That file is missing or has malformed limits.')
   }
   return {
-    version: typeof r.version === 'number' ? r.version : 1,
     exportedAt: typeof r.exportedAt === 'string' ? r.exportedAt : '',
     tasks: r.tasks,
     caps: r.caps,
