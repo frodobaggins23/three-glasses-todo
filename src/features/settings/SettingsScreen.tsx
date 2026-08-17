@@ -3,6 +3,7 @@ import { Dot } from '../../components/Dot'
 import { capHint, countOf } from '../../lib/selectors'
 import { SCOPES, SETTINGS_CHIP_DOT_SIZE } from '../../lib/scopes'
 import { useAppStore } from '../../store/useAppStore'
+import { ExportImportSection } from './ExportImportSection'
 
 export interface SettingsScreenProps {
   goHome: () => void
@@ -70,6 +71,8 @@ export function SettingsScreen({ goHome }: SettingsScreenProps) {
           )
         })}
       </div>
+
+      <ExportImportSection />
 
       <p className="mt-6 text-12.5 leading-[1.55] text-text-faint">{t('settings.footnote')}</p>
     </div>

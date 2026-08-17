@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { buildBackup, type BackupData } from '../lib/backup'
 import { SCOPES, type ScopeKey } from '../lib/scopes'
 import { countOf } from '../lib/selectors'
 import type { AppError, Draft, FxKind, SortMode, Task } from '../lib/types'
@@ -45,6 +46,8 @@ interface AppState {
   updateRemind: (id: number, remind: string) => void
   completeTask: (id: number) => void
   dropTask: (id: number) => void
+  exportBackup: () => BackupData
+  restoreBackup: (data: BackupData) => void
 }
 
 function nextTaskId(tasks: Task[]): number {
@@ -176,6 +179,12 @@ export const useAppStore = create<AppState>()(
         set((s) => ({ fx: { ...s.fx, [id]: 'sink' } }))
         removeTaskAfter(id, SINK_REMOVE_MS, set)
       },
+
+      exportBackup: () => {
+        const state = get()
+        return buildBackup(state.tasks, state.caps)
+      },
+      restoreBackup: (data) => set({ tasks: data.tasks, caps: data.caps, shown: 5, fx: {} }),
     }),
     {
       name: 'three-glasses-storage',

@@ -188,3 +188,33 @@ describe('setSort', () => {
     expect(useAppStore.getState().shown).toBe(5)
   })
 })
+
+describe('exportBackup / restoreBackup', () => {
+  it('exportBackup captures the current tasks and caps', () => {
+    useAppStore.setState({
+      tasks: [{ id: 1, scope: 's', title: 'x', notes: '', remind: '', t: 1 }],
+      caps: { s: 10, m: 6, l: 3 },
+    })
+    const backup = useAppStore.getState().exportBackup()
+    expect(backup.tasks).toEqual(useAppStore.getState().tasks)
+    expect(backup.caps).toEqual({ s: 10, m: 6, l: 3 })
+  })
+
+  it('restoreBackup replaces tasks/caps and resets shown/fx', () => {
+    useAppStore.setState({
+      tasks: [{ id: 1, scope: 's', title: 'old', notes: '', remind: '', t: 1 }],
+      shown: 15,
+      fx: { 1: 'new' },
+    })
+    useAppStore.getState().restoreBackup({
+      version: 1,
+      exportedAt: '',
+      tasks: [{ id: 2, scope: 'l', title: 'new', notes: '', remind: '', t: 2 }],
+      caps: { s: 1, m: 1, l: 1 },
+    })
+    expect(useAppStore.getState().tasks).toEqual([{ id: 2, scope: 'l', title: 'new', notes: '', remind: '', t: 2 }])
+    expect(useAppStore.getState().caps).toEqual({ s: 1, m: 1, l: 1 })
+    expect(useAppStore.getState().shown).toBe(5)
+    expect(useAppStore.getState().fx).toEqual({})
+  })
+})
