@@ -4,23 +4,27 @@ export type Screen =
   | { name: 'detail'; id: number }
   | { name: 'settings' }
 
-export function parseScreen(pathname: string): Screen {
-  if (pathname === '/add') return { name: 'add' }
-  if (pathname === '/settings') return { name: 'settings' }
-  const detailMatch = pathname.match(/^\/task\/(\d+)$/)
+// The app is deployed under a sub-path (e.g. /three-glasses/), configured via
+// Vite's `base`. Routes must be built and parsed relative to that base so
+// pushState keeps the prefix and a hard refresh on a deep link round-trips.
+export function parseScreen(pathname: string, base: string = import.meta.env.BASE_URL): Screen {
+  const relative = pathname.startsWith(base) ? pathname.slice(base.length) : pathname.replace(/^\//, '')
+  if (relative === 'add') return { name: 'add' }
+  if (relative === 'settings') return { name: 'settings' }
+  const detailMatch = relative.match(/^task\/(\d+)$/)
   if (detailMatch) return { name: 'detail', id: Number(detailMatch[1]) }
   return { name: 'home' }
 }
 
-export function pathForScreen(screen: Screen): string {
+export function pathForScreen(screen: Screen, base: string = import.meta.env.BASE_URL): string {
   switch (screen.name) {
     case 'add':
-      return '/add'
+      return `${base}add`
     case 'settings':
-      return '/settings'
+      return `${base}settings`
     case 'detail':
-      return `/task/${screen.id}`
+      return `${base}task/${screen.id}`
     case 'home':
-      return '/'
+      return base
   }
 }

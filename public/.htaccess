@@ -1,0 +1,13 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /three-glasses/
+
+  # Let real files/directories (JS, CSS, icons, etc.) be served as-is.
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Everything else is a client-side route: hand it back to index.html so a
+  # hard refresh on e.g. /three-glasses/add doesn't 404 or drop the base path.
+  RewriteRule ^ index.html [L]
+</IfModule>
