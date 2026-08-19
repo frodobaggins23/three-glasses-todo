@@ -18,7 +18,9 @@
     "aGlassIsFull": "a glass is full",
     "recent": "Recent",
     "sortNewest": "Newest",
-    "sortSize": "Size",
+    "sortOldest": "Oldest",
+    "sortBiggest": "Biggest",
+    "sortSmallest": "Smallest",
     "showMore": "Show {{count}} more",
     "limits": "Limits",
     "dismiss": "Dismiss"

@@ -10,6 +10,7 @@ function reset() {
     homeError: null,
     addError: null,
     sort: 'recent',
+    sortDir: 'desc',
     shown: 5,
     fx: {},
     capNote: null,
@@ -186,6 +187,22 @@ describe('setSort', () => {
     useAppStore.setState({ shown: 15 })
     useAppStore.getState().setSort('size')
     expect(useAppStore.getState().shown).toBe(5)
+  })
+
+  it('switching to a different mode resets direction to desc', () => {
+    useAppStore.setState({ sort: 'recent', sortDir: 'asc' })
+    useAppStore.getState().setSort('size')
+    expect(useAppStore.getState().sort).toBe('size')
+    expect(useAppStore.getState().sortDir).toBe('desc')
+  })
+
+  it('clicking the already-active mode toggles direction instead of resetting it', () => {
+    useAppStore.getState().setSort('recent')
+    expect(useAppStore.getState().sort).toBe('recent')
+    expect(useAppStore.getState().sortDir).toBe('asc')
+
+    useAppStore.getState().setSort('recent')
+    expect(useAppStore.getState().sortDir).toBe('desc')
   })
 })
 

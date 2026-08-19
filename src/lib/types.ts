@@ -21,3 +21,4 @@ export type FxKind = 'pop' | 'sink' | 'new'
 export type AppError = { type: 'glassFull'; scope: ScopeKey; cap: number } | { type: 'titleRequired' }
 
 export type SortMode = 'recent' | 'size'
+export type SortDir = 'asc' | 'desc'

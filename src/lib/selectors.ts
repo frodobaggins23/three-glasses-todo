@@ -1,5 +1,5 @@
 import { SCOPES, SIZE_SORT_ORDER, type ScopeKey } from './scopes'
-import type { FxKind, SortMode, Task } from './types'
+import type { FxKind, SortDir, SortMode, Task } from './types'
 
 interface CountableState {
   tasks: Task[]
@@ -20,10 +20,21 @@ export function anyGlassFull(state: CountableState & { caps: Record<ScopeKey, nu
   return SCOPES.some((s) => countOf(state, s.key) >= state.caps[s.key])
 }
 
-export function sortedTasks(state: { tasks: Task[]; sort: SortMode }): Task[] {
-  return [...state.tasks].sort((a, b) =>
-    state.sort === 'size' ? SIZE_SORT_ORDER[a.scope] - SIZE_SORT_ORDER[b.scope] || b.t - a.t : b.t - a.t,
-  )
+/** Size-sorted comparator; ties (same scope) always break newest-first, regardless of `dir`. */
+function compareBySize(a: Task, b: Task, dir: number): number {
+  const bySize = dir * (SIZE_SORT_ORDER[a.scope] - SIZE_SORT_ORDER[b.scope])
+  if (bySize !== 0) return bySize
+  return b.t - a.t
+}
+
+function compareByRecency(a: Task, b: Task, dir: number): number {
+  return dir * (b.t - a.t)
+}
+
+export function sortedTasks(state: { tasks: Task[]; sort: SortMode; sortDir: SortDir }): Task[] {
+  const dir = state.sortDir === 'asc' ? -1 : 1
+  const compare = state.sort === 'size' ? compareBySize : compareByRecency
+  return [...state.tasks].sort((a, b) => compare(a, b, dir))
 }
 
 export type CountLevel = 'normal' | 'warning' | 'full'
