@@ -12,9 +12,12 @@ export function Glass({ marbles, shaking }: GlassProps) {
   const [activeId, setActiveId] = useState<number | null>(null)
   const active = marbles.find((m) => m.id === activeId)
 
+  const dismissActive = () => setActiveId(null)
+  const toggleActive = (id: number) => setActiveId((current) => (current === id ? null : id))
+
   return (
     <div className={shaking ? 'animate-tg-shake' : undefined}>
-      <div className="relative h-[206px] w-[106px]" onClick={() => setActiveId(null)}>
+      <div className="relative h-[206px] w-[106px]" onClick={dismissActive}>
         <div
           className="absolute inset-0"
           style={{
@@ -36,7 +39,7 @@ export function Glass({ marbles, shaking }: GlassProps) {
               top={m.top}
               background={m.background}
               animation={m.animation}
-              onClick={() => setActiveId((current) => (current === m.id ? null : m.id))}
+              onClick={() => toggleActive(m.id)}
             />
           ))}
         </div>
