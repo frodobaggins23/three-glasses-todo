@@ -5,6 +5,7 @@ import { layoutMarbles } from '../../lib/marbleLayout'
 import { anyGlassFull, countLevel, countOf, sortedTasks, totalMarbles } from '../../lib/selectors'
 import { SC, SCOPES, type ScopeKey } from '../../lib/scopes'
 import { useAppStore } from '../../store/useAppStore'
+import { SortToggle } from './SortToggle'
 
 const COUNT_LEVEL_CLASS: Record<ReturnType<typeof countLevel>, string> = {
   normal: 'text-count-normal',
@@ -21,7 +22,7 @@ export interface HomeScreenProps {
 export function HomeScreen({ goAdd, goDetail, goSettings }: HomeScreenProps) {
   const { t } = useTranslation()
   const state = useAppStore()
-  const { tasks, caps, fx, sort, sortDir, shown, shake, homeError } = state
+  const { tasks, caps, fx, shown, shake, homeError } = state
 
   const total = totalMarbles(state)
   const full = anyGlassFull(state)
@@ -103,33 +104,7 @@ export function HomeScreen({ goAdd, goDetail, goSettings }: HomeScreenProps) {
 
       <div className="mt-[30px] flex items-center justify-between gap-3">
         <div className="text-11 tracking-[1.6px] text-text-faint uppercase">{t('home.recent')}</div>
-        <div className="flex gap-1.5">
-          {(['recent', 'size'] as const).map((mode) => {
-            const active = sort === mode
-            const asc = active && sortDir === 'asc'
-            const label =
-              mode === 'recent'
-                ? asc
-                  ? t('home.sortOldest')
-                  : t('home.sortNewest')
-                : asc
-                  ? t('home.sortSmallest')
-                  : t('home.sortBiggest')
-            return (
-              <button
-                key={mode}
-                type="button"
-                onClick={() => state.setSort(mode)}
-                className={`rounded-pill px-3 py-[5px] text-11 tracking-[1.2px] uppercase transition-colors duration-150 ${
-                  active ? 'bg-selected-pill text-action-text' : 'bg-white/5 text-text-muted'
-                }`}
-              >
-                {label}
-                {active ? <span className="ml-1">{asc ? '↑' : '↓'}</span> : null}
-              </button>
-            )
-          })}
-        </div>
+        <SortToggle />
       </div>
 
       <div className="mt-2.5 flex flex-col gap-px">

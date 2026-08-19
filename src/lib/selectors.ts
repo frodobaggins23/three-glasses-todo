@@ -20,13 +20,21 @@ export function anyGlassFull(state: CountableState & { caps: Record<ScopeKey, nu
   return SCOPES.some((s) => countOf(state, s.key) >= state.caps[s.key])
 }
 
+/** Size-sorted comparator; ties (same scope) always break newest-first, regardless of `dir`. */
+function compareBySize(a: Task, b: Task, dir: number): number {
+  const bySize = dir * (SIZE_SORT_ORDER[a.scope] - SIZE_SORT_ORDER[b.scope])
+  if (bySize !== 0) return bySize
+  return b.t - a.t
+}
+
+function compareByRecency(a: Task, b: Task, dir: number): number {
+  return dir * (b.t - a.t)
+}
+
 export function sortedTasks(state: { tasks: Task[]; sort: SortMode; sortDir: SortDir }): Task[] {
   const dir = state.sortDir === 'asc' ? -1 : 1
-  return [...state.tasks].sort((a, b) =>
-    state.sort === 'size'
-      ? dir * (SIZE_SORT_ORDER[a.scope] - SIZE_SORT_ORDER[b.scope]) || b.t - a.t
-      : dir * (b.t - a.t),
-  )
+  const compare = state.sort === 'size' ? compareBySize : compareByRecency
+  return [...state.tasks].sort((a, b) => compare(a, b, dir))
 }
 
 export type CountLevel = 'normal' | 'warning' | 'full'
