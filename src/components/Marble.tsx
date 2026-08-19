@@ -1,3 +1,5 @@
+import type { MouseEvent } from 'react'
+
 export interface MarbleProps {
   diameter: number
   left: number
@@ -9,9 +11,14 @@ export interface MarbleProps {
 
 /** A single packed marble — ported from Component.layout()'s per-marble style object. */
 export function Marble({ diameter, left, top, background, animation, onClick }: MarbleProps) {
+  const handleClick = (e: MouseEvent) => {
+    e.stopPropagation()
+    onClick?.()
+  }
+
   return (
     <div
-      onClick={onClick}
+      onClick={onClick ? handleClick : undefined}
       style={{
         cursor: onClick ? 'pointer' : undefined,
         position: 'absolute',
