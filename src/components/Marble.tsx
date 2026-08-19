@@ -11,16 +11,14 @@ export interface MarbleProps {
 
 /** A single packed marble — ported from Component.layout()'s per-marble style object. */
 export function Marble({ diameter, left, top, background, animation, onClick }: MarbleProps) {
-  const handleClick = onClick
-    ? (e: MouseEvent) => {
-        e.stopPropagation()
-        onClick()
-      }
-    : undefined
+  const handleClick = (e: MouseEvent) => {
+    e.stopPropagation()
+    onClick?.()
+  }
 
   return (
     <div
-      onClick={handleClick}
+      onClick={onClick ? handleClick : undefined}
       style={{
         cursor: onClick ? 'pointer' : undefined,
         position: 'absolute',
