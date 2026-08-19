@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware'
 import { buildBackup, type BackupData } from '../lib/backup'
 import { SCOPES, type ScopeKey } from '../lib/scopes'
 import { countOf } from '../lib/selectors'
-import type { AppError, Draft, FxKind, SortMode, Task } from '../lib/types'
+import type { AppError, Draft, FxKind, SortDir, SortMode, Task } from '../lib/types'
 
 const DEFAULT_CAPS = Object.fromEntries(SCOPES.map((s) => [s.key, s.defCap])) as Record<ScopeKey, number>
 
@@ -24,6 +24,7 @@ interface AppState {
   homeError: AppError | null
   addError: AppError | null
   sort: SortMode
+  sortDir: SortDir
   shown: number
   fx: Record<number, FxKind>
   capNote: ScopeKey | null
@@ -40,6 +41,7 @@ interface AppState {
   dismissHomeError: () => void
   incCap: (scope: ScopeKey) => void
   decCap: (scope: ScopeKey) => void
+  /** Switches to `sort` if it isn't already active; if it's already active, toggles the sort direction instead. */
   setSort: (sort: SortMode) => void
   showMore: () => void
   updateNotes: (id: number, notes: string) => void
@@ -79,6 +81,7 @@ export const useAppStore = create<AppState>()(
       homeError: null,
       addError: null,
       sort: 'recent',
+      sortDir: 'desc',
       shown: 5,
       fx: {},
       capNote: null,
@@ -163,7 +166,12 @@ export const useAppStore = create<AppState>()(
         set((s) => ({ capNote: null, caps: { ...s.caps, [scope]: s.caps[scope] - 1 } }))
       },
 
-      setSort: (sort) => set({ sort, shown: 5 }),
+      setSort: (sort) =>
+        set((s) =>
+          s.sort === sort
+            ? { sortDir: s.sortDir === 'desc' ? 'asc' : 'desc', shown: 5 }
+            : { sort, sortDir: 'desc', shown: 5 },
+        ),
       showMore: () => set((s) => ({ shown: s.shown + 5 })),
 
       updateNotes: (id, notes) =>

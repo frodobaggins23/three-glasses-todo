@@ -1,5 +1,5 @@
 import { SCOPES, SIZE_SORT_ORDER, type ScopeKey } from './scopes'
-import type { FxKind, SortMode, Task } from './types'
+import type { FxKind, SortDir, SortMode, Task } from './types'
 
 interface CountableState {
   tasks: Task[]
@@ -20,9 +20,12 @@ export function anyGlassFull(state: CountableState & { caps: Record<ScopeKey, nu
   return SCOPES.some((s) => countOf(state, s.key) >= state.caps[s.key])
 }
 
-export function sortedTasks(state: { tasks: Task[]; sort: SortMode }): Task[] {
+export function sortedTasks(state: { tasks: Task[]; sort: SortMode; sortDir: SortDir }): Task[] {
+  const dir = state.sortDir === 'asc' ? -1 : 1
   return [...state.tasks].sort((a, b) =>
-    state.sort === 'size' ? SIZE_SORT_ORDER[a.scope] - SIZE_SORT_ORDER[b.scope] || b.t - a.t : b.t - a.t,
+    state.sort === 'size'
+      ? dir * (SIZE_SORT_ORDER[a.scope] - SIZE_SORT_ORDER[b.scope]) || b.t - a.t
+      : dir * (b.t - a.t),
   )
 }
 
