@@ -1,17 +1,20 @@
+import { useState } from 'react'
 import type { MarbleLayoutResult } from '../lib/marbleLayout'
 import { Marble } from './Marble'
 
 export interface GlassProps {
   marbles: MarbleLayoutResult[]
   shaking?: boolean
-  onMarbleTap?: (id: number) => void
 }
 
 /** The 106x206 tumbler glass with procedural highlights — ported from the prototype's per-glass markup. */
-export function Glass({ marbles, shaking, onMarbleTap }: GlassProps) {
+export function Glass({ marbles, shaking }: GlassProps) {
+  const [activeId, setActiveId] = useState<number | null>(null)
+  const active = marbles.find((m) => m.id === activeId)
+
   return (
     <div className={shaking ? 'animate-tg-shake' : undefined}>
-      <div className="relative h-[206px] w-[106px]">
+      <div className="relative h-[206px] w-[106px]" onClick={() => setActiveId(null)}>
         <div
           className="absolute inset-0"
           style={{
@@ -33,10 +36,23 @@ export function Glass({ marbles, shaking, onMarbleTap }: GlassProps) {
               top={m.top}
               background={m.background}
               animation={m.animation}
-              onClick={onMarbleTap ? () => onMarbleTap(m.id) : undefined}
+              onClick={() => setActiveId((current) => (current === m.id ? null : m.id))}
             />
           ))}
         </div>
+        {active ? (
+          <div
+            className="pointer-events-none absolute z-10 w-max max-w-[180px] rounded-pill bg-black/80 px-2.5 py-1 text-center text-11.5 text-white shadow-lg"
+            style={{
+              left: active.left + active.diameter / 2 + 5,
+              top: active.top + 4 - 8,
+              transform: 'translate(-50%, -100%)',
+              textWrap: 'balance',
+            }}
+          >
+            {active.title}
+          </div>
+        ) : null}
         {/* left specular highlight */}
         <div
           className="absolute"

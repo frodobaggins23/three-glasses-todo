@@ -5,11 +5,13 @@ export type MarbleFx = 'pop' | 'sink' | 'new'
 
 export interface MarbleLayoutInput {
   id: number
+  title: string
   fx?: MarbleFx
 }
 
 export interface MarbleLayoutResult {
   id: number
+  title: string
   diameter: number
   left: number
   top: number
@@ -35,6 +37,7 @@ export function layoutMarbles(hue: number, tasks: MarbleLayoutInput[], cap: numb
     const t = tasks[i]
     results.push({
       id: t.id,
+      title: t.title,
       diameter: d,
       left: p.x - d / 2,
       top: p.y - d / 2,

@@ -62,12 +62,12 @@ export function HomeScreen({ goAdd, goDetail, goSettings }: HomeScreenProps) {
           const cap = caps[s.key]
           const marbles = layoutMarbles(
             s.hue,
-            list.map((t) => ({ id: t.id, fx: fx[t.id] })),
+            list.map((t) => ({ id: t.id, title: t.title, fx: fx[t.id] })),
             cap,
           )
           return (
             <div key={s.key} className="flex flex-1 flex-col items-center">
-              <Glass marbles={marbles} shaking={shake === s.key} onMarbleTap={goDetail} />
+              <Glass marbles={marbles} shaking={shake === s.key} />
               <button
                 type="button"
                 onClick={() => handleGlassTap(s.key)}

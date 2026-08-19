@@ -11,7 +11,14 @@ export interface MarbleProps {
 export function Marble({ diameter, left, top, background, animation, onClick }: MarbleProps) {
   return (
     <div
-      onClick={onClick}
+      onClick={
+        onClick
+          ? (e) => {
+              e.stopPropagation()
+              onClick()
+            }
+          : undefined
+      }
       style={{
         cursor: onClick ? 'pointer' : undefined,
         position: 'absolute',
