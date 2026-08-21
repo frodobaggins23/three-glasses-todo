@@ -66,14 +66,14 @@ export function ExportImportSection() {
         <button
           type="button"
           onClick={handleExport}
-          className="h-10 flex-1 rounded-button border border-white/14 text-14 text-text-secondary active:scale-[0.98]"
+          className="h-10 flex-1 rounded-button border border-white/14 text-[14px] text-text-secondary active:scale-[0.98]"
         >
           {t('settings.backup.export')}
         </button>
         <button
           type="button"
           onClick={handleImportClick}
-          className="h-10 flex-1 rounded-button border border-white/14 text-14 text-text-secondary active:scale-[0.98]"
+          className="h-10 flex-1 rounded-button border border-white/14 text-[14px] text-text-secondary active:scale-[0.98]"
         >
           {t('settings.backup.import')}
         </button>
