@@ -54,8 +54,35 @@
       "export": "Export",
       "import": "Import",
       "confirmReplace": "Import will replace everything currently on this device with the {{count}} task(s) in this file. Continue?",
+      "cancelImport": "Cancel",
+      "confirmImportAction": "Replace everything",
       "importSuccess": "Imported {{count}} task(s).",
       "importUnknownError": "Couldn't read that file."
     }
+  },
+  "pool": {
+    "title": "Projects",
+    "subhead": "Long haul work, held in buckets. Spill a marble when you're ready to carry a piece of it.",
+    "committed": "{{pct}}% committed",
+    "emptied": "Emptied — every piece is out there",
+    "editing": "Editing",
+    "spill": "Spill a marble",
+    "clear": "Clear it away",
+    "new": "+ New project bucket",
+    "footnote": "Marbles leave the bucket for good — once spilled they live in a glass on their own. The bucket only remembers how much of the project you've committed.",
+    "name": "Name",
+    "namePlaceholder": "Project name",
+    "untitled": "Untitled project",
+    "remaining": "Left in the bucket",
+    "drop": "Drop project",
+    "done": "Done"
+  },
+  "spill": {
+    "from": "Spilling from",
+    "detach": "Detach",
+    "drainBy": "Drains the bucket by",
+    "preview": "{{before}}% left → {{after}}% after",
+    "undo": "Spilled {{pct}}% of {{name}} into {{size}}.",
+    "undoAction": "Undo"
   }
 }

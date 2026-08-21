@@ -6,6 +6,7 @@ describe('parseScreen', () => {
     expect(parseScreen('/three-glasses/', '/three-glasses/')).toEqual({ name: 'home' })
     expect(parseScreen('/three-glasses/add', '/three-glasses/')).toEqual({ name: 'add' })
     expect(parseScreen('/three-glasses/settings', '/three-glasses/')).toEqual({ name: 'settings' })
+    expect(parseScreen('/three-glasses/pool', '/three-glasses/')).toEqual({ name: 'pool' })
     expect(parseScreen('/three-glasses/task/42', '/three-glasses/')).toEqual({ name: 'detail', id: 42 })
   })
 
@@ -26,6 +27,7 @@ describe('pathForScreen', () => {
     expect(pathForScreen({ name: 'home' }, '/three-glasses/')).toBe('/three-glasses/')
     expect(pathForScreen({ name: 'add' }, '/three-glasses/')).toBe('/three-glasses/add')
     expect(pathForScreen({ name: 'settings' }, '/three-glasses/')).toBe('/three-glasses/settings')
+    expect(pathForScreen({ name: 'pool' }, '/three-glasses/')).toBe('/three-glasses/pool')
     expect(pathForScreen({ name: 'detail', id: 42 }, '/three-glasses/')).toBe('/three-glasses/task/42')
   })
 
@@ -34,6 +36,7 @@ describe('pathForScreen', () => {
       { name: 'home' },
       { name: 'add' },
       { name: 'settings' },
+      { name: 'pool' },
       { name: 'detail', id: 42 },
     ]
     for (const base of ['/', '/three-glasses/']) {

@@ -1,8 +1,22 @@
 import { useTranslation } from 'react-i18next'
+import { BucketGlyph } from '../../components/BucketGlyph'
 import { MiniGlass } from '../../components/MiniGlass'
 import { countOf } from '../../lib/selectors'
-import { SCOPES } from '../../lib/scopes'
+import { DRAIN_STEP, SCOPES } from '../../lib/scopes'
 import { useAppStore } from '../../store/useAppStore'
+
+function DrainButton({ symbol, onClick, disabled }: { symbol: string; onClick: () => void; disabled: boolean }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      className="flex h-[34px] w-[34px] items-center justify-center rounded-full border border-white/14 text-[19px] text-count-normal disabled:cursor-default disabled:text-text-disabled"
+    >
+      {symbol}
+    </button>
+  )
+}
 
 export interface AddScreenProps {
   goHome: () => void
@@ -11,7 +25,8 @@ export interface AddScreenProps {
 export function AddScreen({ goHome }: AddScreenProps) {
   const { t } = useTranslation()
   const state = useAppStore()
-  const { draft, caps, shake, addError } = state
+  const { draft, caps, shake, addError, projects } = state
+  const project = projects.find((p) => p.id === draft.projectId) ?? null
 
   const handleAdd = () => {
     if (state.tryAddTask()) goHome()
@@ -34,6 +49,51 @@ export function AddScreen({ goHome }: AddScreenProps) {
 
       <h1 className="mt-[26px] font-serif text-34 tracking-[-0.4px] text-text-primary">{t('add.heading')}</h1>
       <p className="mt-2 text-13 leading-[1.5] text-text-muted">{t('add.subhead')}</p>
+
+      {project ? (
+        <div className="mt-5 rounded-field border border-white/10 bg-white/4 px-[15px] py-3.5">
+          <div className="flex items-center gap-3">
+            <BucketGlyph hue={project.hue} remaining={project.remaining} width={34} height={30} borderRadius={5} />
+            <div className="flex-1">
+              <div className="text-11 tracking-[1.4px] text-text-faint uppercase">{t('spill.from')}</div>
+              <div className="mt-[3px] text-15 text-text-secondary">{project.name || t('pool.untitled')}</div>
+            </div>
+            <button
+              type="button"
+              onClick={state.detachProject}
+              className="text-12 whitespace-nowrap text-text-muted"
+            >
+              {t('spill.detach')}
+            </button>
+          </div>
+          <div className="mt-3.5 flex items-center gap-3 border-t border-white/7 pt-3.5">
+            <div className="flex-1">
+              <div className="text-12.5 text-text-quiet">{t('spill.drainBy')}</div>
+              <div className="mt-0.5 text-12.5 text-text-muted">
+                {t('spill.preview', {
+                  before: project.remaining,
+                  after: Math.max(0, project.remaining - draft.drainPct),
+                })}
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <DrainButton
+                symbol="−"
+                onClick={() => state.setDrainPct(draft.drainPct - DRAIN_STEP)}
+                disabled={draft.drainPct <= 0}
+              />
+              <div className="min-w-[52px] text-center font-serif text-24 text-text-primary">
+                {draft.drainPct}%
+              </div>
+              <DrainButton
+                symbol="+"
+                onClick={() => state.setDrainPct(draft.drainPct + DRAIN_STEP)}
+                disabled={draft.drainPct >= project.remaining}
+              />
+            </div>
+          </div>
+        </div>
+      ) : null}
 
       <div className="mt-6 flex gap-2.5">
         {SCOPES.map((s) => {

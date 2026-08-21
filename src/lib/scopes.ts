@@ -27,3 +27,10 @@ export const SETTINGS_CHIP_DOT_SIZE: Record<ScopeKey, number> = { l: 26, m: 20, 
 
 /** Sort order for the "Size" recent-list sort: Large first. */
 export const SIZE_SORT_ORDER: Record<ScopeKey, number> = { l: 0, m: 1, s: 2 }
+
+/** Default bucket drain suggested when a scope card is picked while spilling from a project. */
+export const DRAIN_DEFAULT: Record<ScopeKey, number> = { s: 5, m: 15, l: 30 }
+
+/** Step size for the Add-screen drain stepper. */
+export const DRAIN_STEP = 5
+
