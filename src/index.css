@@ -77,6 +77,8 @@
   --animate-tg-drop: tg-drop 520ms cubic-bezier(0.3, 1.4, 0.5, 1);
   --animate-tg-shake: tg-shake 550ms ease-in-out;
   --animate-tg-rise: tg-rise 220ms ease-out;
+  --animate-tg-pour: tg-pour 760ms ease-in-out forwards;
+  --animate-tg-fold: tg-fold 380ms ease-in forwards;
 }
 
 /* Keyframes live outside @theme deliberately: Tailwind tree-shakes unused
@@ -156,6 +158,34 @@
     opacity: 1;
   }
 }
+@keyframes tg-pour {
+  0% {
+    transform: translateY(-18px) rotate(0deg);
+    opacity: 0;
+  }
+  25% {
+    transform: translateY(0) rotate(-58deg);
+    opacity: 1;
+  }
+  70% {
+    transform: translateY(0) rotate(-58deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-10px) rotate(-10deg);
+    opacity: 0;
+  }
+}
+@keyframes tg-fold {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.94) translateY(-6px);
+  }
+}
 
 /* Non-namespaced tokens (gradients) — Tailwind's @theme only generates
    utilities for recognized namespaces (--color-*, --text-*, etc.); these
@@ -179,4 +209,39 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Project bucket "remaining %" slider (Pool screen inline editor). */
+.tg-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 20px;
+  background: transparent;
+}
+.tg-slider::-webkit-slider-runnable-track {
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+}
+.tg-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  margin-top: -6.5px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #f3ead9, #d9cdb6);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+.tg-slider::-moz-range-track {
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+}
+.tg-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #f3ead9, #d9cdb6);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }

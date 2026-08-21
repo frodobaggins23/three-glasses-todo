@@ -2,10 +2,13 @@ import { useTranslation } from 'react-i18next'
 import { Dot } from '../../components/Dot'
 import { Glass } from '../../components/Glass'
 import { layoutMarbles } from '../../lib/marbleLayout'
+import { bucketLiquidGradient } from '../../lib/projectColor'
 import { anyGlassFull, countLevel, countOf, sortedTasks, totalMarbles } from '../../lib/selectors'
 import { SC, SCOPES, type ScopeKey } from '../../lib/scopes'
 import { useAppStore } from '../../store/useAppStore'
 import { SortToggle } from './SortToggle'
+
+const POUR_LEFT: Record<ScopeKey, string> = { s: '18%', m: '50%', l: '82%' }
 
 const COUNT_LEVEL_CLASS: Record<ReturnType<typeof countLevel>, string> = {
   normal: 'text-count-normal',
@@ -17,12 +20,13 @@ export interface HomeScreenProps {
   goAdd: () => void
   goDetail: (id: number) => void
   goSettings: () => void
+  goPool: () => void
 }
 
-export function HomeScreen({ goAdd, goDetail, goSettings }: HomeScreenProps) {
+export function HomeScreen({ goAdd, goDetail, goSettings, goPool }: HomeScreenProps) {
   const { t } = useTranslation()
   const state = useAppStore()
-  const { tasks, caps, fx, shown, shake, homeError } = state
+  const { tasks, caps, fx, shown, shake, homeError, pour, undo, projects } = state
 
   const total = totalMarbles(state)
   const full = anyGlassFull(state)
@@ -47,14 +51,40 @@ export function HomeScreen({ goAdd, goDetail, goSettings }: HomeScreenProps) {
             {full ? ` · ${t('home.aGlassIsFull')}` : ''}
           </p>
         </div>
-        <button
-          type="button"
-          onClick={goSettings}
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-white/12 text-[17px] text-icon-muted hover:bg-white/6"
-        >
-          ⚙
-        </button>
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={goPool}
+            className="relative flex h-10 w-10 items-center justify-center rounded-full border border-white/12 hover:bg-white/6"
+          >
+            <div
+              className="relative h-4 w-[17px] rounded-[1px_1px_4px_4px] bg-white/13"
+              style={{ clipPath: 'polygon(0 0, 100% 0, 82% 100%, 18% 100%)' }}
+            >
+              <div className="absolute right-0 bottom-0 left-0 h-[9px] bg-icon-muted opacity-75" />
+            </div>
+          </button>
+          <button
+            type="button"
+            onClick={goSettings}
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/12 text-[17px] text-icon-muted hover:bg-white/6"
+          >
+            ⚙
+          </button>
+        </div>
       </div>
+
+      {pour ? (
+        <div
+          className="pointer-events-none absolute top-[104px] z-[2] h-[26px] w-[30px] -ml-[15px] overflow-hidden rounded-[3px] border border-white/20 bg-white/5 animate-tg-pour"
+          style={{ left: POUR_LEFT[pour.scope], transformOrigin: '60% 100%' }}
+        >
+          <div
+            className="absolute right-0 bottom-0 left-0 h-3"
+            style={{ background: bucketLiquidGradient(pour.hue) }}
+          />
+        </div>
+      ) : null}
 
       <div className="mt-[26px] flex justify-between gap-2">
         {SCOPES.map((s) => {
@@ -140,6 +170,24 @@ export function HomeScreen({ goAdd, goDetail, goSettings }: HomeScreenProps) {
         className="pointer-events-none absolute right-0 bottom-0 left-0 h-[150px]"
         style={{ background: 'linear-gradient(180deg, rgba(15,14,13,0) 0%, var(--color-app-end) 55%)' }}
       />
+      {undo ? (
+        <div className="animate-tg-rise absolute right-0 bottom-[132px] left-0 flex items-center gap-3 rounded-field border border-white/10 bg-[rgba(28,24,21,0.92)] px-3.5 py-3">
+          <div className="flex-1 text-12.5 leading-[1.4] text-text-tertiary" style={{ textWrap: 'pretty' }}>
+            {t('spill.undo', {
+              pct: undo.pct,
+              name: projects.find((p) => p.id === undo.projectId)?.name || t('pool.untitled'),
+              size: t(`scopes.${undo.scope}`).toLowerCase(),
+            })}
+          </div>
+          <button
+            type="button"
+            onClick={state.undoSpill}
+            className="text-12 tracking-[1.2px] whitespace-nowrap text-selected-pill uppercase"
+          >
+            {t('spill.undoAction')}
+          </button>
+        </div>
+      ) : null}
       <button
         type="button"
         onClick={() => {

@@ -1,15 +1,26 @@
 import { describe, expect, it } from 'vitest'
 import { backupFilename, buildBackup, InvalidBackupError, parseBackup } from './backup'
-import type { Task } from './types'
+import type { Project, Task } from './types'
 
 const tasks: Task[] = [{ id: 1, scope: 'm', title: 'Water the fig', notes: '', remind: '', t: 1000 }]
 const caps = { s: 12, m: 6, l: 3 }
+const projects: Project[] = [{ id: 1, name: 'Kitchen remodel', hue: 150, remaining: 62 }]
 
 describe('buildBackup / parseBackup round trip', () => {
-  it('parses exactly what was built', () => {
-    const built = buildBackup(tasks, caps)
+  it('parses exactly what was built, including projects', () => {
+    const built = buildBackup(tasks, caps, projects)
     const parsed = parseBackup(JSON.stringify(built))
     expect(parsed).toEqual(built)
+  })
+
+  it('treats a missing projects key (a pre-Pool backup) as an empty pool rather than rejecting', () => {
+    const parsed = parseBackup(JSON.stringify({ tasks, caps }))
+    expect(parsed.projects).toEqual([])
+  })
+
+  it('rejects a malformed project', () => {
+    const bad = { tasks, caps, projects: [{ id: 1, name: 'x' }] }
+    expect(() => parseBackup(JSON.stringify(bad))).toThrow(InvalidBackupError)
   })
 })
 

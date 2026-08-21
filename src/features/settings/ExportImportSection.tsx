@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { backupFilename, InvalidBackupError, parseBackup } from '../../lib/backup'
+import { backupFilename, InvalidBackupError, parseBackup, type BackupData } from '../../lib/backup'
 import { useAppStore } from '../../store/useAppStore'
 
 type Status = { kind: 'error'; message: string } | { kind: 'success'; message: string } | null
@@ -29,6 +29,7 @@ export function ExportImportSection() {
   const exportBackup = useAppStore((s) => s.exportBackup)
   const restoreBackup = useAppStore((s) => s.restoreBackup)
   const [status, setStatus] = useState<Status>(null)
+  const [pendingImport, setPendingImport] = useState<BackupData | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleExport = async () => {
@@ -48,14 +49,22 @@ export function ExportImportSection() {
     const text = await file.text()
     try {
       const data = parseBackup(text)
-      if (!window.confirm(t('settings.backup.confirmReplace', { count: data.tasks.length }))) return
-      restoreBackup(data)
-      setStatus({ kind: 'success', message: t('settings.backup.importSuccess', { count: data.tasks.length }) })
+      setStatus(null)
+      setPendingImport(data)
     } catch (err) {
       const message = err instanceof InvalidBackupError ? err.message : t('settings.backup.importUnknownError')
       setStatus({ kind: 'error', message })
     }
   }
+
+  const confirmImport = () => {
+    if (!pendingImport) return
+    restoreBackup(pendingImport)
+    setStatus({ kind: 'success', message: t('settings.backup.importSuccess', { count: pendingImport.tasks.length }) })
+    setPendingImport(null)
+  }
+
+  const cancelImport = () => setPendingImport(null)
 
   return (
     <div className="mt-7 rounded-card border border-white/8 bg-white/3.5 px-4.5 py-4">
@@ -86,7 +95,29 @@ export function ExportImportSection() {
         />
       </div>
 
-      {status ? (
+      {pendingImport ? (
+        <div className="mt-3 rounded-field border border-error-border bg-error-bg px-3.5 py-3">
+          <div className="text-12.5 leading-[1.45] text-error-text">
+            {t('settings.backup.confirmReplace', { count: pendingImport.tasks.length })}
+          </div>
+          <div className="mt-3 flex gap-2.5">
+            <button
+              type="button"
+              onClick={cancelImport}
+              className="h-9 flex-1 rounded-button border border-white/14 text-[13px] text-text-secondary active:scale-[0.98]"
+            >
+              {t('settings.backup.cancelImport')}
+            </button>
+            <button
+              type="button"
+              onClick={confirmImport}
+              className="h-9 flex-1 rounded-button border border-error-border text-[13px] text-error-text hover:bg-error-bg active:scale-[0.98]"
+            >
+              {t('settings.backup.confirmImportAction')}
+            </button>
+          </div>
+        </div>
+      ) : status ? (
         <div
           className="mt-3 text-12.5 leading-[1.45]"
           style={{ color: status.kind === 'error' ? 'var(--color-error-text)' : 'var(--color-text-muted)' }}

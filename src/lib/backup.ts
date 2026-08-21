@@ -1,14 +1,15 @@
 import { SCOPES, type ScopeKey } from './scopes'
-import type { Task } from './types'
+import type { Project, Task } from './types'
 
 export interface BackupData {
   exportedAt: string
   tasks: Task[]
   caps: Record<ScopeKey, number>
+  projects: Project[]
 }
 
-export function buildBackup(tasks: Task[], caps: Record<ScopeKey, number>): BackupData {
-  return { exportedAt: new Date().toISOString(), tasks, caps }
+export function buildBackup(tasks: Task[], caps: Record<ScopeKey, number>, projects: Project[]): BackupData {
+  return { exportedAt: new Date().toISOString(), tasks, caps, projects }
 }
 
 export function backupFilename(date = new Date()): string {
@@ -39,6 +40,17 @@ function isCaps(value: unknown): value is Record<ScopeKey, number> {
   return SCOPES.every((s) => typeof c[s.key] === 'number')
 }
 
+function isProject(value: unknown): value is Project {
+  if (typeof value !== 'object' || value === null) return false
+  const p = value as Record<string, unknown>
+  return (
+    typeof p.id === 'number' &&
+    typeof p.name === 'string' &&
+    typeof p.hue === 'number' &&
+    typeof p.remaining === 'number'
+  )
+}
+
 /** Parses and validates a previously exported backup file's contents. Throws InvalidBackupError if malformed. */
 export function parseBackup(json: string): BackupData {
   let raw: unknown
@@ -57,9 +69,15 @@ export function parseBackup(json: string): BackupData {
   if (!isCaps(r.caps)) {
     throw new InvalidBackupError('That file is missing or has malformed limits.')
   }
+  // Backups exported before the Projects Pool existed have no `projects` key —
+  // treat missing as an empty pool rather than rejecting older files.
+  if (r.projects !== undefined && (!Array.isArray(r.projects) || !r.projects.every(isProject))) {
+    throw new InvalidBackupError('That file has malformed projects.')
+  }
   return {
     exportedAt: typeof r.exportedAt === 'string' ? r.exportedAt : '',
     tasks: r.tasks,
     caps: r.caps,
+    projects: Array.isArray(r.projects) ? r.projects : [],
   }
 }

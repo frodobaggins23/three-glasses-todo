@@ -7,6 +7,7 @@ export interface AppRouter {
   goAdd: () => void
   goDetail: (id: number) => void
   goSettings: () => void
+  goPool: () => void
 }
 
 /**
@@ -34,6 +35,7 @@ export function useAppRouter(): AppRouter {
   const goAdd = useCallback(() => navigate({ name: 'add' }), [navigate])
   const goDetail = useCallback((id: number) => navigate({ name: 'detail', id }), [navigate])
   const goSettings = useCallback(() => navigate({ name: 'settings' }), [navigate])
+  const goPool = useCallback(() => navigate({ name: 'pool' }), [navigate])
 
-  return { screen, goHome, goAdd, goDetail, goSettings }
+  return { screen, goHome, goAdd, goDetail, goSettings, goPool }
 }
