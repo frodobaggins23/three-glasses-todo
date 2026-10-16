@@ -5,7 +5,7 @@ export type Screen =
   | { name: 'settings' }
   | { name: 'pool' }
 
-// The app is deployed under a sub-path (e.g. /three-glasses/), configured via
+// The app may be served under a sub-path, configured via
 // Vite's `base`. Routes must be built and parsed relative to that base so
 // pushState keeps the prefix and a hard refresh on a deep link round-trips.
 export function parseScreen(pathname: string, base: string = import.meta.env.BASE_URL): Screen {
